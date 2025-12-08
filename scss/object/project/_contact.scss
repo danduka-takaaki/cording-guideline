@@ -1,0 +1,66 @@
+// ==========================================================================
+// Project: Contact
+// ==========================================================================
+// お問い合わせフォーム
+
+@use "../../foundation/variables" as *;
+@use "../../foundation/mixin" as *;
+
+.p-contact {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.p-contact__title {
+  font-size: $font-size-xl;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.p-contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.p-contact__field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.p-contact__label {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+}
+
+.p-contact__label--required {
+  &::after {
+    content: "*";
+    color: $color-accent;
+    margin-left: $spacing-xs;
+  }
+}
+
+.p-contact__error {
+  color: $color-accent;
+  font-size: $font-size-sm;
+}
+
+.p-contact__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: $spacing-md;
+
+  // ボタンの余白はProject側で制御
+  .c-button {
+    min-width: 200px;
+  }
+}
+
+.p-contact__note {
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  text-align: center;
+}
+

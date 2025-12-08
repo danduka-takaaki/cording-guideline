@@ -1,0 +1,35 @@
+// ==========================================================================
+// Foundation: Mixin
+// ==========================================================================
+// 再利用可能なMixin関数を定義
+
+@use "variables" as *;
+
+// --------------------------------------------------------------------------
+// Media Query
+// --------------------------------------------------------------------------
+// モバイルファースト（min-width）で記述
+@mixin mq($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (max-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (max-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (max-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint == pc {
+    // pcはlgのエイリアス
+    @media (max-width: $breakpoint-lg) {
+      @content;
+    }
+  }
+}

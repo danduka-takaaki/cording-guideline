@@ -1,0 +1,75 @@
+// ==========================================================================
+// Project: Article
+// ==========================================================================
+// 記事コンテンツのスタイル
+
+@use "../../foundation/variables" as *;
+@use "../../foundation/mixin" as *;
+
+.p-article {
+  // 記事全体のスタイル
+}
+
+.p-article__header {
+  margin-bottom: $spacing-lg;
+}
+
+.p-article__title {
+  font-size: $font-size-xl;
+  margin-bottom: $spacing-sm;
+
+  @include mq(pc) {
+    font-size: 3.2rem;
+  }
+}
+
+.p-article__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+}
+
+.p-article__body {
+  // 記事本文内の要素スタイル
+  > * + * {
+    margin-top: $spacing-md;
+  }
+
+  p {
+    line-height: $line-height-base;
+  }
+
+  h2 {
+    margin-top: $spacing-xl;
+    font-size: $font-size-xl;
+  }
+
+  h3 {
+    margin-top: $spacing-lg;
+    font-size: $font-size-lg;
+  }
+
+  ul,
+  ol {
+    padding-left: $spacing-lg;
+    list-style: revert;
+  }
+
+  a {
+    color: $color-primary;
+    text-decoration: underline;
+
+    @include hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.p-article__footer {
+  margin-top: $spacing-xl;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $color-border;
+}
+

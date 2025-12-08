@@ -1,0 +1,22 @@
+// ==========================================================================
+// Layout: Main
+// ==========================================================================
+// メインコンテンツエリアのレイアウト
+
+@use "../foundation/variables" as *;
+@use "../foundation/mixin" as *;
+
+.l-main {
+  max-width: $breakpoint-xl;
+  margin: 0 auto;
+  padding: $spacing-md;
+
+  @include mq(pc) {
+    padding: $spacing-lg;
+  }
+}
+
+.l-main--full {
+  max-width: none;
+}
+

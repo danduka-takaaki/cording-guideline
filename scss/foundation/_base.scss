@@ -1,0 +1,49 @@
+// ==========================================================================
+// Foundation: Base
+// ==========================================================================
+// body, html等の基本設定
+
+@use "variables" as *;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-base;
+  color: $color-text;
+  background-color: $color-background;
+}
+
+// --------------------------------------------------------------------------
+// Headings
+// --------------------------------------------------------------------------
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family-heading;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+}
+
+// --------------------------------------------------------------------------
+// Links
+// --------------------------------------------------------------------------
+a {
+  transition: color $transition-duration $transition-timing;
+}
+
+// --------------------------------------------------------------------------
+// Selection
+// --------------------------------------------------------------------------
+::selection {
+  background-color: $color-primary;
+  color: $color-background;
+}
+

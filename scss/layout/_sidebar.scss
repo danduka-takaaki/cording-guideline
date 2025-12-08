@@ -1,0 +1,34 @@
+// ==========================================================================
+// Layout: Sidebar
+// ==========================================================================
+// サイドバーのレイアウト
+
+@use "../foundation/variables" as *;
+@use "../foundation/mixin" as *;
+
+.l-sidebar {
+  width: 100%;
+
+  @include mq(pc) {
+    width: 280px;
+    flex-shrink: 0;
+  }
+}
+
+// 2カラムレイアウト用
+.l-contents {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  @include mq(pc) {
+    flex-direction: row;
+    gap: $spacing-xl;
+  }
+}
+
+.l-contents__main {
+  flex: 1;
+  min-width: 0; // flex item の overflow 対策
+}
+

@@ -1,0 +1,30 @@
+// ==========================================================================
+// Layout: Header
+// ==========================================================================
+// サイト共通のヘッダーレイアウト
+
+@use "../foundation/variables" as *;
+@use "../foundation/mixin" as *;
+
+.l-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: $z-index-fixed;
+  background-color: $color-background;
+}
+
+.l-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: $breakpoint-xl;
+  margin: 0 auto;
+  padding: $spacing-md;
+
+  @include mq(pc) {
+    padding: $spacing-md $spacing-lg;
+  }
+}
+
