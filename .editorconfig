@@ -1,0 +1,19 @@
+# http://editorconfig.org
+root = true
+
+# 全体共通設定
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdownファイルの設定
+[*.md]
+trim_trailing_whitespace = false
+
+# Makefile（タブ必須）
+[Makefile]
+indent_style = tab
