@@ -1,0 +1,70 @@
+// ==========================================================================
+// Component: Button
+// ==========================================================================
+
+@use "sass:color";
+@use "../../foundation/variables" as *;
+@use "../../foundation/mixin" as *;
+
+.c-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  border: $border-width solid transparent;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: all $transition-duration $transition-timing;
+
+  &--primary {
+    background-color: $color-primary;
+    color: $color-background;
+
+    &:hover {
+      background-color: color.adjust($color-primary, $lightness: -10%);
+    }
+  }
+
+  &--secondary {
+    background-color: $color-secondary;
+    color: $color-background;
+
+    &:hover {
+      background-color: color.adjust($color-secondary, $lightness: -10%);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    border-color: $color-primary;
+    color: $color-primary;
+
+    &:hover {
+      background-color: $color-primary;
+      color: $color-background;
+    }
+  }
+
+  &--small {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+  }
+
+  &--large {
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-lg;
+  }
+
+  &--block {
+    width: 100%;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+

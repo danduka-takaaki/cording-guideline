@@ -1,0 +1,42 @@
+// ==========================================================================
+// Layout: Sidebar
+// ==========================================================================
+
+@use "../foundation/variables" as *;
+@use "../foundation/mixin" as *;
+
+.l-sidebar {
+  display: none;
+
+  @include media-up($breakpoint-lg) {
+    display: block;
+  }
+
+  &__section {
+    background-color: $color-background;
+    border: $border-width solid $color-border;
+    border-radius: $border-radius;
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+    padding-bottom: $spacing-sm;
+    border-bottom: $border-width solid $color-border;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__link {
+    @include hover-opacity;
+    font-size: $font-size-sm;
+  }
+}
+

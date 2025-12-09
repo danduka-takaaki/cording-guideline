@@ -1,0 +1,57 @@
+// ==========================================================================
+// Foundation: Variables (Shared Default)
+// ==========================================================================
+
+// Colors
+$color-primary: #0066cc !default;
+$color-secondary: #6c757d !default;
+$color-accent: #ff6600 !default;
+$color-success: #28a745 !default;
+$color-warning: #ffc107 !default;
+$color-danger: #dc3545 !default;
+
+$color-text: #333333 !default;
+$color-text-light: #666666 !default;
+$color-background: #ffffff !default;
+$color-border: #dddddd !default;
+
+// Typography
+$font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$font-size-base: 1.6rem !default;
+$font-size-sm: 1.4rem !default;
+$font-size-lg: 1.8rem !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+
+// Spacing
+$spacing-unit: 8px !default;
+$spacing-xs: $spacing-unit * 0.5 !default;  // 4px
+$spacing-sm: $spacing-unit !default;         // 8px
+$spacing-md: $spacing-unit * 2 !default;     // 16px
+$spacing-lg: $spacing-unit * 3 !default;     // 24px
+$spacing-xl: $spacing-unit * 4 !default;     // 32px
+
+// Breakpoints
+$breakpoint-sm: 576px !default;
+$breakpoint-md: 768px !default;
+$breakpoint-lg: 992px !default;
+$breakpoint-xl: 1200px !default;
+
+// Layout
+$container-max-width: 1200px !default;
+$header-height: 60px !default;
+$footer-height: 80px !default;
+$sidebar-width: 280px !default;
+
+// Border
+$border-radius: 4px !default;
+$border-width: 1px !default;
+
+// Shadow
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !default;
+$box-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.15) !default;
+
+// Transition
+$transition-duration: 0.3s !default;
+$transition-timing: ease-in-out !default;
+

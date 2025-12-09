@@ -1,0 +1,46 @@
+// ==========================================================================
+// Layout: Header
+// ==========================================================================
+
+@use "../foundation/variables" as *;
+@use "../foundation/mixin" as *;
+
+.l-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $header-height;
+  background-color: $color-background;
+  box-shadow: $box-shadow;
+  z-index: 1000;
+
+  &__inner {
+    @include container;
+    @include flex-between;
+    height: 100%;
+  }
+
+  &__logo {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+  }
+
+  &__nav {
+    display: none;
+
+    @include media-up($breakpoint-md) {
+      display: block;
+    }
+  }
+
+  &__nav-list {
+    display: flex;
+    gap: $spacing-lg;
+  }
+
+  &__nav-link {
+    @include hover-opacity;
+  }
+}
+

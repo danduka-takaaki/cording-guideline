@@ -1,0 +1,38 @@
+// ==========================================================================
+// Foundation: Base
+// ==========================================================================
+
+@use "variables" as *;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  color: $color-text;
+  background-color: $color-background;
+}
+
+a {
+  transition: color $transition-duration $transition-timing;
+  
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+img {
+  height: auto;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background-color: $color-primary;
+  color: $color-background;
+}
+

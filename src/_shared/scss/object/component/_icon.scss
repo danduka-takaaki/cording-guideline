@@ -1,0 +1,43 @@
+// ==========================================================================
+// Component: Icon
+// ==========================================================================
+
+@use "../../foundation/variables" as *;
+
+.c-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+
+  &--small {
+    font-size: $font-size-sm;
+  }
+
+  &--large {
+    font-size: $font-size-lg;
+  }
+
+  &--primary {
+    color: $color-primary;
+  }
+
+  &--secondary {
+    color: $color-secondary;
+  }
+
+  &--success {
+    color: $color-success;
+  }
+
+  &--warning {
+    color: $color-warning;
+  }
+
+  &--danger {
+    color: $color-danger;
+  }
+}
+

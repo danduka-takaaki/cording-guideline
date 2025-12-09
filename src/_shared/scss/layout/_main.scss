@@ -1,0 +1,25 @@
+// ==========================================================================
+// Layout: Main
+// ==========================================================================
+
+@use "../foundation/variables" as *;
+@use "../foundation/mixin" as *;
+
+.l-main {
+  min-height: calc(100vh - #{$header-height} - #{$footer-height});
+  padding-top: $header-height + $spacing-lg;
+  padding-bottom: $spacing-xl;
+
+  &__inner {
+    @include container;
+  }
+
+  &--with-sidebar {
+    @include media-up($breakpoint-lg) {
+      display: grid;
+      grid-template-columns: 1fr $sidebar-width;
+      gap: $spacing-lg;
+    }
+  }
+}
+

@@ -1,0 +1,65 @@
+// ==========================================================================
+// Component: Input
+// ==========================================================================
+
+@use "../../foundation/variables" as *;
+
+.c-input {
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  color: $color-text;
+  background-color: $color-background;
+  border: $border-width solid $color-border;
+  border-radius: $border-radius;
+  transition: border-color $transition-duration $transition-timing,
+              box-shadow $transition-duration $transition-timing;
+
+  &::placeholder {
+    color: $color-text-light;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+  }
+
+  &--error {
+    border-color: $color-danger;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($color-danger, 0.1);
+    }
+  }
+
+  &--success {
+    border-color: $color-success;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($color-success, 0.1);
+    }
+  }
+
+  &:disabled {
+    background-color: $color-border;
+    cursor: not-allowed;
+  }
+}
+
+.c-textarea {
+  @extend .c-input;
+  min-height: 120px;
+  resize: vertical;
+}
+
+.c-select {
+  @extend .c-input;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-sm center;
+  background-size: 24px;
+  padding-right: $spacing-xl;
+}
+

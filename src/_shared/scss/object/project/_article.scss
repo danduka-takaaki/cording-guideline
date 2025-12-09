@@ -1,0 +1,109 @@
+// ==========================================================================
+// Project: Article
+// ==========================================================================
+
+@use "../../foundation/variables" as *;
+@use "../../foundation/mixin" as *;
+
+.p-article {
+  &__header {
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-md;
+    border-bottom: $border-width solid $color-border;
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-sm;
+
+    @include media-up($breakpoint-md) {
+      font-size: 3.2rem;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    font-size: $font-size-sm;
+    color: $color-text-light;
+  }
+
+  &__body {
+    line-height: 1.8;
+
+    h2 {
+      font-size: 2rem;
+      margin: $spacing-xl 0 $spacing-md;
+    }
+
+    h3 {
+      font-size: $font-size-lg;
+      margin: $spacing-lg 0 $spacing-sm;
+    }
+
+    p {
+      margin-bottom: $spacing-md;
+    }
+
+    ul,
+    ol {
+      margin-bottom: $spacing-md;
+      padding-left: $spacing-lg;
+    }
+
+    li {
+      margin-bottom: $spacing-xs;
+    }
+
+    ul li {
+      list-style-type: disc;
+    }
+
+    ol li {
+      list-style-type: decimal;
+    }
+
+    img {
+      margin: $spacing-md 0;
+      border-radius: $border-radius;
+    }
+
+    blockquote {
+      margin: $spacing-md 0;
+      padding: $spacing-md;
+      background-color: rgba($color-border, 0.3);
+      border-left: 4px solid $color-primary;
+      border-radius: $border-radius;
+    }
+
+    code {
+      background-color: rgba($color-border, 0.5);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+
+    pre {
+      background-color: $color-text;
+      color: $color-background;
+      padding: $spacing-md;
+      border-radius: $border-radius;
+      overflow-x: auto;
+      margin: $spacing-md 0;
+
+      code {
+        background-color: transparent;
+        padding: 0;
+      }
+    }
+  }
+
+  &__footer {
+    margin-top: $spacing-xl;
+    padding-top: $spacing-md;
+    border-top: $border-width solid $color-border;
+  }
+}
+

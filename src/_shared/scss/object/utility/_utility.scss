@@ -1,0 +1,101 @@
+// ==========================================================================
+// Utility: Utility Classes
+// ==========================================================================
+
+@use "../../foundation/variables" as *;
+@use "../../foundation/mixin" as *;
+
+// Display
+.u-hidden {
+  display: none !important;
+}
+
+.u-visible {
+  display: block !important;
+}
+
+.u-invisible {
+  visibility: hidden !important;
+}
+
+// Visually hidden (for accessibility)
+.u-visually-hidden {
+  @include visually-hidden;
+}
+
+// Text alignment
+.u-text-left {
+  text-align: left !important;
+}
+
+.u-text-center {
+  text-align: center !important;
+}
+
+.u-text-right {
+  text-align: right !important;
+}
+
+// Font weight
+.u-font-normal {
+  font-weight: $font-weight-normal !important;
+}
+
+.u-font-bold {
+  font-weight: $font-weight-bold !important;
+}
+
+// Colors
+.u-color-primary {
+  color: $color-primary !important;
+}
+
+.u-color-secondary {
+  color: $color-secondary !important;
+}
+
+.u-color-danger {
+  color: $color-danger !important;
+}
+
+// Margin utilities
+.u-mt-0 { margin-top: 0 !important; }
+.u-mt-sm { margin-top: $spacing-sm !important; }
+.u-mt-md { margin-top: $spacing-md !important; }
+.u-mt-lg { margin-top: $spacing-lg !important; }
+.u-mt-xl { margin-top: $spacing-xl !important; }
+
+.u-mb-0 { margin-bottom: 0 !important; }
+.u-mb-sm { margin-bottom: $spacing-sm !important; }
+.u-mb-md { margin-bottom: $spacing-md !important; }
+.u-mb-lg { margin-bottom: $spacing-lg !important; }
+.u-mb-xl { margin-bottom: $spacing-xl !important; }
+
+// Padding utilities
+.u-p-0 { padding: 0 !important; }
+.u-p-sm { padding: $spacing-sm !important; }
+.u-p-md { padding: $spacing-md !important; }
+.u-p-lg { padding: $spacing-lg !important; }
+
+// Width
+.u-w-full {
+  width: 100% !important;
+}
+
+.u-w-auto {
+  width: auto !important;
+}
+
+// Responsive display
+@include media-down($breakpoint-md) {
+  .u-hidden-mobile {
+    display: none !important;
+  }
+}
+
+@include media-up($breakpoint-md) {
+  .u-hidden-desktop {
+    display: none !important;
+  }
+}
+

@@ -1,0 +1,77 @@
+// ==========================================================================
+// Project: Card
+// ==========================================================================
+
+@use "../../foundation/variables" as *;
+@use "../../foundation/mixin" as *;
+
+.p-card {
+  background-color: $color-background;
+  border: $border-width solid $color-border;
+  border-radius: $border-radius;
+  overflow: hidden;
+  transition: box-shadow $transition-duration $transition-timing;
+
+  &:hover {
+    box-shadow: $box-shadow-lg;
+  }
+
+  &__image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform $transition-duration $transition-timing;
+    }
+  }
+
+  &:hover &__image img {
+    transform: scale(1.05);
+  }
+
+  &__body {
+    padding: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xs;
+    @include line-clamp(2);
+  }
+
+  &__text {
+    font-size: $font-size-sm;
+    color: $color-text-light;
+    @include line-clamp(3);
+  }
+
+  &__footer {
+    padding: $spacing-sm $spacing-md;
+    border-top: $border-width solid $color-border;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-sm;
+    color: $color-text-light;
+  }
+}
+
+// Card grid layout
+.p-card-grid {
+  display: grid;
+  gap: $spacing-md;
+  grid-template-columns: 1fr;
+
+  @include media-up($breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-up($breakpoint-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
