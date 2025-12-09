@@ -1,20 +1,23 @@
-# CI/CD Pipeline Design Document: Global Site Monorepo (SCSS Edition)
+# CI/CD Pipeline Design Document: Global Site Monorepo (SCSS + HTML Edition)
 
-このドキュメントは、SCSSを採用した多言語Webサイトのビルド・デプロイ設計仕様書である。
+このドキュメントは、HTML/SCSS/JSを含む多言語Webサイトのビルド・デプロイ設計仕様書である。
 Cursorはこの内容に基づき、ディレクトリ構築とビルドスクリプトの実装を行うこと。
 
 ## 1. アーキテクチャ概要
 
 * **リポジトリ構成:** モノレポ (Monorepo)
 * **CSS設計:** FLOCSSベースのSCSS構成
-* **ビルド戦略:** SCSS Overlay Strategy
-    1. **Merge (結合):** 共通SCSS (`_shared`) を作業用ディレクトリ (`.tmp`) に展開し、国別SCSS (`locales`) で上書きする。これにより `_variables.scss` 等の値を国ごとに差し替えることを可能にする。
-    2. **Compile (変換):** `.tmp` 内の結合されたSCSSをコンパイルし、配信ディレクトリ (`dist`) にCSSを出力する。
-    3. **Assets (静的資材):** JSや画像ファイルは `dist` へ直接マージコピーする。
+* **ビルド戦略:** Overlay Strategy (HTML/SCSS/Assets)
+    1. **SCSS (Merge & Compile):**
+       共通SCSS (`src/_shared/scss`) と国別SCSS (`src/locales/xx/scss`) を作業用ディレクトリ (`.tmp`) で結合・上書きし、そこからコンパイルを行う。これにより変数 (`_variables.scss`) の国別差し替えを可能にする。
+    2. **HTML (Overlay):**
+       共通HTML (`src/_shared/html`) をベースとし、国別HTML (`src/locales/xx/html`) で同名ファイルを上書きして `dist` ルートへ配置する。
+    3. **Assets (Overlay):**
+       画像やJSも同様に結合し、`dist` 配下へ配置する。
 
 ## 2. ディレクトリ構造仕様
 
-以下のディレクトリ構造を厳守して作成すること。SCSSディレクトリはFLOCSS構成を採用する。
+以下のディレクトリ構造を厳守して作成すること。
 
 ```text
 /project-root
@@ -22,21 +25,23 @@ Cursorはこの内容に基づき、ディレクトリ構築とビルドスク�
 ├── .gitignore            # 除外設定
 ├── src/
 │   ├── _shared/          # [共通資材]
-│   │   ├── scss/
-│   │   │   ├── style.scss            # エントリーポイント (@useの集約)
-│   │   │   ├── foundation/           # _base.scss, _reset.scss, _variables.scss, _mixin.scss
-│   │   │   ├── layout/               # _header.scss, _footer.scss, _main.scss, _sidebar.scss
+│   │   ├── html/         # [HTML] 共通テンプレート (index.html, common.html)
+│   │   ├── scss/         # [SCSS] FLOCSS構成
+│   │   │   ├── style.scss            # エントリーポイント
+│   │   │   ├── foundation/           # _variables.scss, _reset.scss
+│   │   │   ├── layout/               # _header.scss, _footer.scss
 │   │   │   └── object/
-│   │   │       ├── component/        # _button.scss, _icon.scss, _input.scss
-│   │   │       ├── project/          # _article.scss, _card.scss, _contact.scss
-│   │   │       └── utility/          # _utility.scss
+│   │   │       ├── component/        # _button.scss
+│   │   │       ├── project/          # _card.scss
+│   │   │       └── utility/
 │   │   ├── js/
 │   │   └── img/
 │   └── locales/          # [国別資材] (差分のみ配置)
 │       ├── jp/
+│       │   ├── html/     # [HTML] JP独自または上書き用HTML
 │       │   ├── scss/
 │       │   │   └── foundation/
-│       │   │       └── _variables.scss  # 日本専用の変数定義（上書き用）
+│       │   │       └── _variables.scss  # JP専用の変数定義
 │       │   └── img/
 │       └── us/
 └── .github/
@@ -48,7 +53,7 @@ Cursorはこの内容に基づき、ディレクトリ構築とビルドスク�
 
 ### 3.1. ビルドスクリプト (`package.json`)
 
-`sass` パッケージを使用し、一時ディレクトリ(`.tmp`)を経由するビルドフローを実装する。
+`sass` パッケージを使用し、HTML、SCSS、静的アセットそれぞれに対してオーバーレイ（共通+独自の上書き）処理を実装する。
 
 **`package.json` 実装要件:**
 
@@ -61,20 +66,21 @@ Cursorはこの内容に基づき、ディレクトリ構築とビルドスク�
     "clean": "rimraf dist .tmp",
     "prebuild": "npm run clean",
 
-    "//_COMMENT": "--- Build Flows (Clean -> Prepare -> Sass -> Assets) ---",
-    "build:jp": "npm run _prepare:jp && npm run _sass:jp && npm run _assets:jp",
-    "build:us": "npm run _prepare:us && npm run _sass:us && npm run _assets:us",
-    
+    "//_COMMENT": "--- Build Flows (Parallel Execution) ---",
+    "build:jp": "npm run _prepare:jp && npm run _sass:jp && npm run _html:jp && npm run _assets:jp",
+    "build:us": "npm run _prepare:us && npm run _sass:us && npm run _html:us && npm run _assets:us",
     "build:all": "npm-run-all -p build:jp build:us",
 
     "//_INTERNAL_JP": "--- Internal Steps (JP) ---",
     "_prepare:jp": "mkdir -p .tmp/jp && cpx \"src/_shared/scss/**/*\" .tmp/jp/scss && cpx \"src/locales/jp/scss/**/*\" .tmp/jp/scss",
     "_sass:jp": "mkdir -p dist/jp/css && sass .tmp/jp/scss/style.scss dist/jp/css/style.css --style compressed --no-source-map",
+    "_html:jp": "cpx \"src/_shared/html/**/*\" dist/jp && cpx \"src/locales/jp/html/**/*\" dist/jp",
     "_assets:jp": "cpx \"src/_shared/{js,img}/**/*\" dist/jp && cpx \"src/locales/jp/{js,img}/**/*\" dist/jp",
 
     "//_INTERNAL_US": "--- Internal Steps (US) ---",
     "_prepare:us": "mkdir -p .tmp/us && cpx \"src/_shared/scss/**/*\" .tmp/us/scss && cpx \"src/locales/us/scss/**/*\" .tmp/us/scss",
     "_sass:us": "mkdir -p dist/us/css && sass .tmp/us/scss/style.scss dist/us/css/style.css --style compressed --no-source-map",
+    "_html:us": "cpx \"src/_shared/html/**/*\" dist/us && cpx \"src/locales/us/html/**/*\" dist/us",
     "_assets:us": "cpx \"src/_shared/{js,img}/**/*\" dist/us && cpx \"src/locales/us/{js,img}/**/*\" dist/us"
   },
   "devDependencies": {
@@ -103,14 +109,10 @@ dist/
 
 GitHub Actionsを使用し、Webサーバーへデプロイする。
 
-**要件:**
-* Node.js v18以上を使用（Sass互換性のため）
-* `npm run build:all` 実行後に `dist/` ディレクトリをデプロイ対象とする
-
 **`deploy.yml` の実装例:**
 
 ```yaml
-name: Deploy Assets
+name: Deploy Global Site
 
 on:
   push:
@@ -139,6 +141,9 @@ jobs:
       - name: Build all locales
         run: npm run build:all
 
+      - name: List files (Debug)
+        run: ls -R dist/
+
       - name: Deploy to Web Server
         uses: easingthemes/ssh-deploy@v4
         env:
@@ -155,9 +160,12 @@ jobs:
 このドキュメントを読み込んだ後、以下の手順を実行してください。
 
 1.  **ディレクトリ構築:**
-    * `src/_shared/scss` 配下に、仕様書セクション2の階層通りにフォルダと空ファイルを作成してください。
-    * `src/locales/jp/scss/foundation/_variables.scss` も作成してください。
-    * `style.scss` には適切な `@use` 記述を行ってください。
-2.  **設定ファイル作成:** `package.json` と `.gitignore` を作成してください。
+    * `src` 配下のディレクトリ構造を作成してください（`html`ディレクトリも忘れずに）。
+    * `src/_shared/html/index.html` (共通トップページ) を作成してください。
+    * `src/_shared/scss` 配下はFLOCSS構成で空ファイルを作成し、`style.scss` でそれらを `@use` してください。
+2.  **設定ファイル作成:** `package.json` と `.gitignore` を仕様に従って作成してください。
 3.  **ワークフロー作成:** `.github/workflows/deploy.yml` を作成してください。
-4.  **インストール:** ターミナルで `npm install` を実行するコマンドを提案してください。
+4.  **動作確認用ファイル:**
+    * `src/locales/jp/html/index.html` を作成し、中身を「JP Top (Override)」として、HTMLの上書き動作が確認できるようにしてください。
+    * `src/locales/jp/scss/foundation/_variables.scss` を作成し、共通設定とは違う変数を定義してください。
+5.  **インストール:** ターミナルで `npm install` を実行するコマンドを提案してください。

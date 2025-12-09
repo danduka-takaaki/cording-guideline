@@ -1,4 +1,4 @@
-name: Deploy Assets
+name: Deploy Global Site
 
 on:
   push:
@@ -27,6 +27,9 @@ jobs:
       - name: Build all locales
         run: npm run build:all
 
+      - name: List files (Debug)
+        run: ls -R dist/
+
       - name: Deploy to Web Server
         uses: easingthemes/ssh-deploy@v4
         env:
@@ -36,4 +39,3 @@ jobs:
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           TARGET: ${{ secrets.DEPLOY_PATH }}
-
