@@ -1,22 +1,30 @@
-# 開発者向け手順書 (Developer Manual)
+# 開発者マニュアル
 
-このドキュメントでは、Astroフレームワークを用いた本プロジェクトの開発フローについて解説します。
+Astroフレームワークを用いた本プロジェクトの開発手順を解説する。
 
 ---
 
-## 1. ページの作成と編集
+## 1. ページ作成
 
-本プロジェクトは **ファイルベースルーティング** を採用しています。`src/pages/` 配下のディレクトリ構造がそのままURLになります。
+### 1.1 ファイルベースルーティング
 
-### 1.1 新しいページの作成手順
-例として、日本サイトに「会社概要 (about)」ページを追加する場合：
+`src/pages/` 配下のディレクトリ構造がそのままURLになる。
 
-1. `src/pages/jp/about.astro` を作成します。
-2. 共通レイアウトを読み込み、コンテンツを記述します。
+| ファイルパス | URL |
+|-------------|-----|
+| `src/pages/index.astro` | `/` |
+| `src/pages/jp/index.astro` | `/jp/` |
+| `src/pages/jp/about.astro` | `/jp/about/` |
+| `src/pages/us/products/list.astro` | `/us/products/list/` |
+
+### 1.2 新規ページ作成例
+
+日本サイトに「会社概要」ページを追加する場合：
+
+**`src/pages/jp/about.astro`**
 
 ```astro
 ---
-// フロントマター: コンポーネントのインポートや変数を定義
 import Layout from '../../layouts/PageLayout.astro';
 import SectionTitle from '../../components/SectionTitle.astro';
 ---
@@ -31,35 +39,106 @@ import SectionTitle from '../../components/SectionTitle.astro';
 </Layout>
 ```
 
-### 1.2 共通パーツ（コンポーネント）の利用
-ヘッダー、フッター、ボタンなどの共通パーツは `src/components/` に定義されています。これらをインポートして使用することで、デザインの統一性を保ちます。
+### 1.3 Astroコンポーネント構造
+
+```astro
+---
+// フロントマター: サーバーサイドで実行
+import Component from '../components/Component.astro';
+
+const title = "ページタイトル";
+const items = await fetch('/api/items').then(r => r.json());
+---
+
+<!-- テンプレート: HTMLとして出力 -->
+<Component title={title} />
+
+{items.map(item => <p>{item.name}</p>)}
+
+<style>
+  /* スコープ付きCSS: このコンポーネントのみ適用 */
+  p { color: blue; }
+</style>
+```
 
 ---
 
-## 2. スタイルの管理 (SCSS/FLOCSS)
+## 2. コンポーネント開発
 
-### 2.1 構成
-スタイルファイルは `src/styles/` に集約されています。設計思想は従来通り **FLOCSS** を踏襲しています。
+### 2.1 コンポーネントの配置
 
-* `foundation/`: 変数、Mixin、リセット
-* `layout/`: ヘッダー、フッター等の大枠
-* `object/`: Component, Project, Utility
+| ディレクトリ | 用途 |
+|-------------|------|
+| `src/components/` | 共通UIパーツ (Button, Card, Header等) |
+| `src/layouts/` | ページレイアウト |
 
-### 2.2 国別テーマの適用メカニズム
-国ごとに色やフォントを変えるため、**テーマファイル** をエントリーポイントとして使用しています。
+### 2.2 Props定義
 
-* **JPサイト:** `src/styles/theme-jp.scss`
-* **USサイト:** `src/styles/theme-us.scss`
+```astro
+---
+// Props型定義 (TypeScript)
+interface Props {
+  text: string;
+  variant?: 'primary' | 'secondary';
+  disabled?: boolean;
+}
 
-各テーマファイル内で変数を定義した後、共通のスタイルを `@use` で読み込んでいます。
+const { text, variant = 'primary', disabled = false } = Astro.props;
+---
 
-**src/styles/theme-jp.scss の例:**
+<button class={`c-button c-button--${variant}`} disabled={disabled}>
+  {text}
+</button>
+```
+
+### 2.3 Slotによるコンテンツ挿入
+
+```astro
+---
+// Card.astro
+---
+<div class="p-card">
+  <div class="p-card__header">
+    <slot name="header" />
+  </div>
+  <div class="p-card__body">
+    <slot />  <!-- デフォルトスロット -->
+  </div>
+</div>
+```
+
+**使用例:**
+
+```astro
+<Card>
+  <h2 slot="header">タイトル</h2>
+  <p>本文コンテンツ</p>
+</Card>
+```
+
+---
+
+## 3. スタイル管理
+
+### 3.1 テーマファイル構成
+
+国ごとにテーマファイルをエントリーポイントとして使用。
+
+| サイト | ファイル |
+|-------|---------|
+| JP | `src/styles/theme-jp.scss` |
+| US | `src/styles/theme-us.scss` |
+
+### 3.2 テーマファイルの構造
+
+**`src/styles/theme-jp.scss`**
+
 ```scss
-// 1. JP固有の変数を定義
+// 1. JP固有の変数定義
 $color-primary: #e60012;
 $font-family-base: "Hiragino Kaku Gothic ProN", sans-serif;
 
-// 2. 共通スタイルを読み込み (変数はここで渡されるか、ファイル順序により適用)
+// 2. 共通スタイル読み込み
 @use "foundation/base" with (
   $color-primary: $color-primary
 );
@@ -67,28 +146,149 @@ $font-family-base: "Hiragino Kaku Gothic ProN", sans-serif;
 @use "object/component/button";
 ```
 
-### 2.3 スタイルの修正フロー
-* **全サイト共通のデザイン変更:** `src/styles/object/` 配下のファイルを修正します。
-* **特定国のみ色を変えたい:** 該当する国の `theme-xx.scss` の変数定義を変更します。
-* **特定国のみ全く違うデザインにしたい:** その国専用のページ (`src/pages/jp/special.astro`) に `<style>` タグで直接記述するか、専用のSCSSファイルを作成してインポートしてください。
+### 3.3 スタイル修正フロー
+
+| 変更内容 | 編集箇所 |
+|---------|---------|
+| 全サイト共通 | `src/styles/object/` 配下 |
+| 特定国の色/フォント | 該当国の `theme-*.scss` 変数 |
+| 特定国の固有デザイン | ページ内 `<style>` または専用SCSS |
+
+### 3.4 コンポーネント内スタイル
+
+Astroの `<style>` はデフォルトでスコープ付き。
+
+```astro
+<div class="custom">スコープ付き</div>
+
+<style>
+  /* このコンポーネント内の .custom のみに適用 */
+  .custom { color: red; }
+</style>
+
+<style is:global>
+  /* グローバルに適用 (慎重に使用) */
+  body { margin: 0; }
+</style>
+```
 
 ---
 
-## 3. 画像・アセットの扱い
+## 4. 画像・アセット
 
-画像ファイルは `public/` ディレクトリに配置します。
+### 4.1 配置と参照
 
-* **配置:** `public/img/common/logo.svg`
-* **参照:** `<img src="/img/common/logo.svg" alt="Logo" />`
+画像は `public/` ディレクトリに配置。
 
-Astroのビルド時に `public/` 以下のファイルはそのまま `dist/` のルートにコピーされます。
+| 配置 | 参照 |
+|------|------|
+| `public/img/common/logo.svg` | `<img src="/img/common/logo.svg">` |
+| `public/img/jp/hero.webp` | `<img src="/img/jp/hero.webp">` |
+
+### 4.2 最適化画像の使用
+
+```astro
+---
+import { Image } from 'astro:assets';
+import heroImage from '../assets/hero.png';
+---
+
+<!-- 自動最適化 -->
+<Image src={heroImage} alt="ヒーロー画像" width={800} height={400} />
+```
 
 ---
 
-## 4. トラブルシューティング
+## 5. データ取得
 
-### Q. SCSSの変更が反映されない
-AstroのHMR（ホットモジュールリプレースメント）は強力ですが、稀にSCSSの依存関係が複雑な場合に更新が遅れることがあります。その場合は開発サーバーを再起動してください。
+### 5.1 ビルド時取得
 
-### Q. 以前のような `_shared` からの上書きはできないの？
-できません。v2.0からは「ファイルを上書きする」のではなく、「共通コンポーネントをimportし、必要ならPropsで挙動を変える」あるいは「別のコンポーネントを使う」ことで差分を表現します。
+```astro
+---
+// ビルド時に実行 (SSG)
+const response = await fetch('https://api.example.com/data');
+const data = await response.json();
+---
+
+<ul>
+  {data.map(item => <li>{item.name}</li>)}
+</ul>
+```
+
+### 5.2 Content Collections
+
+`src/content/` 配下のMarkdown/MDXを型安全に管理。
+
+```astro
+---
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+---
+
+{posts.map(post => <a href={`/blog/${post.slug}`}>{post.data.title}</a>)}
+```
+
+---
+
+## 6. トラブルシューティング
+
+### SCSSの変更が反映されない
+
+依存関係が複雑な場合、HMRが遅れることがある。
+
+```bash
+# 開発サーバーを再起動
+Ctrl+C → npm run dev
+```
+
+### TypeScriptエラー
+
+Props型定義が不足している場合に発生。
+
+```astro
+---
+// 型定義を追加
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+```
+
+### ビルドエラー: 動的インポート
+
+SSGでは動的ルートに `getStaticPaths` が必要。
+
+```astro
+---
+export async function getStaticPaths() {
+  return [
+    { params: { id: '1' } },
+    { params: { id: '2' } },
+  ];
+}
+
+const { id } = Astro.params;
+---
+```
+
+---
+
+## 7. v1.xからの移行ガイド
+
+### 非推奨パターン
+
+| 旧 (v1.x) | 新 (v2.0) |
+|-----------|-----------|
+| `_shared` からのファイル上書き | コンポーネントのimport + Props |
+| HTMLファイル直接編集 | `.astro` コンポーネント |
+| cpxによるビルド | `npm run build` |
+
+### 移行手順
+
+1. 既存HTMLを `.astro` に変換
+2. 共通部分をコンポーネント化
+3. 国別差分はPropsまたは別コンポーネントで対応
+4. テーマファイルで変数切り替え
+
