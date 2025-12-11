@@ -1,55 +1,26 @@
 {
   "name": "global-site-assets",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Global Site Monorepo - SCSS + HTML Edition",
+  "type": "module",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "clean": "rimraf dist .tmp",
-    "prebuild": "npm run clean",
-
-    "//_COMMENT_BUILD": "--- Production Build (One-off) ---",
-    "build:jp": "npm run _prepare:jp && npm run _sass:jp && npm run _html:jp && npm run _assets:jp",
-    "build:us": "npm run _prepare:us && npm run _sass:us && npm run _html:us && npm run _assets:us",
-    "build:all": "npm-run-all -p build:jp build:us",
-
-    "//_COMMENT_WATCH": "--- Development Watch (Auto Compile) ---",
-    "dev:jp": "npm run clean && npm-run-all -p _watch:copy:shared:jp _watch:copy:local:jp _watch:sass:jp _watch:html:jp _watch:assets:jp",
-    "dev:us": "npm run clean && npm-run-all -p _watch:copy:shared:us _watch:copy:local:us _watch:sass:us _watch:html:us _watch:assets:us",
-
-    "//_INTERNAL_JP": "--- Internal Steps (JP) ---",
-    "_prepare:jp": "mkdirp .tmp/jp && cpx \"src/_shared/scss/**/*\" .tmp/jp/scss && cpx \"src/locales/jp/scss/**/*\" .tmp/jp/scss",
-    "_sass:jp": "sass .tmp/jp/scss:dist/jp/css --style compressed --no-source-map",
-    "_html:jp": "cpx \"src/_shared/html/**/*\" dist/jp && cpx \"src/locales/jp/html/**/*\" dist/jp",
-    "_assets:jp": "cpx \"src/_shared/{js,img}/**/*\" dist/jp && cpx \"src/locales/jp/{js,img}/**/*\" dist/jp",
-
-    "//_INTERNAL_WATCH_JP": "--- Watchers (JP) ---",
-    "_watch:copy:shared:jp": "cpx \"src/_shared/scss/**/*\" .tmp/jp/scss -w",
-    "_watch:copy:local:jp": "cpx \"src/locales/jp/scss/**/*\" .tmp/jp/scss -w",
-    "_watch:sass:jp": "sass .tmp/jp/scss:dist/jp/css --watch --style expanded --source-map",
-    "_watch:html:jp": "cpx \"src/{_shared,locales/jp}/html/**/*\" dist/jp -w",
-    "_watch:assets:jp": "cpx \"src/{_shared,locales/jp}/{js,img}/**/*\" dist/jp -w",
-
-    "//_INTERNAL_US": "--- Internal Steps (US) ---",
-    "_prepare:us": "mkdirp .tmp/us && cpx \"src/_shared/scss/**/*\" .tmp/us/scss && cpx \"src/locales/us/scss/**/*\" .tmp/us/scss",
-    "_sass:us": "sass .tmp/us/scss:dist/us/css --style compressed --no-source-map",
-    "_html:us": "cpx \"src/_shared/html/**/*\" dist/us && cpx \"src/locales/us/html/**/*\" dist/us",
-    "_assets:us": "cpx \"src/_shared/{js,img}/**/*\" dist/us && cpx \"src/locales/us/{js,img}/**/*\" dist/us",
-
-    "//_INTERNAL_WATCH_US": "--- Watchers (US) ---",
-    "_watch:copy:shared:us": "cpx \"src/_shared/scss/**/*\" .tmp/us/scss -w",
-    "_watch:copy:local:us": "cpx \"src/locales/us/scss/**/*\" .tmp/us/scss -w",
-    "_watch:sass:us": "sass .tmp/us/scss:dist/us/css --watch --style expanded --source-map",
-    "_watch:html:us": "cpx \"src/{_shared,locales/us}/html/**/*\" dist/us -w",
-    "_watch:assets:us": "cpx \"src/{_shared,locales/us}/{js,img}/**/*\" dist/us -w"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "clean": "rimraf dist .astro"
+  },
+  "dependencies": {
+    "astro": "^4.0.0"
   },
   "devDependencies": {
-    "cpx": "^1.5.0",
-    "mkdirp": "^3.0.1",
-    "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.0",
-    "sass": "^1.69.0"
+    "sass": "^1.69.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-astro": "^0.12.0"
   }
 }
