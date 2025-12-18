@@ -204,14 +204,14 @@ Componentには外部影響するmarginを設定しない。
 
 #### メディアクエリ
 
-モバイルファーストで記述し、PC向けはネストで追加。
+PCファーストで記述し、SP向けはネストで追加。
 
 ```scss
 .p-card {
-  width: 100%;
+  width: 300px;
 
-  @include mq(pc) {
-    width: 300px;
+  @include mq(sp) {
+    width: 100%;
   }
 }
 ```
@@ -272,7 +272,6 @@ const btn = document.querySelector('.js-submit-button');
 
 ### 5.2 最適化
 
-- コミット前にTinyPNG等で圧縮
 - `width`/`height` 属性を指定（CLS防止）
 
 ---
